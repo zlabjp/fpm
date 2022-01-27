@@ -30,7 +30,7 @@ RUN apt-get update \
 	zip \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& apt-get clean
-RUN adduser fpm 
+RUN adduser fpm
 
 # everything container includes all the scripting languages. These
 # greatly embiggen the underlying docker container, so they're
@@ -85,6 +85,24 @@ RUN gem install --no-ri --no-rdoc --install-dir=/fpm fpm
 
 FROM build as release
 COPY --from=build /fpm /fpm
+ENV GEM_PATH /fpm
+ENV PATH "/fpm/bin:${PATH}"
+WORKDIR /src
+ENTRYPOINT ["/fpm/bin/fpm"]
+
+# build a container from a local gem.
+FROM ${BASE_ENV}-base AS build-local
+RUN apt-get update
+RUN apt-get install --no-install-recommends -y \
+	gcc make ruby-dev libc-dev
+ENV GEM_PATH /fpm
+ENV PATH "/fpm/bin:${PATH}"
+COPY --chown=fpm . .
+RUN make package
+RUN gem install --no-ri --no-rdoc --install-dir=/fpm fpm-1.14.1.gem
+
+FROM build-local as local
+COPY --from=build-local /fpm /fpm
 ENV GEM_PATH /fpm
 ENV PATH "/fpm/bin:${PATH}"
 WORKDIR /src

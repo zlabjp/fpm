@@ -71,3 +71,5 @@ docker-test-%: .docker-test-%
 docker-release-%:
 	DOCKER_BUILDKIT=1 docker build -t fpm  --build-arg BASE_ENV=$* --build-arg TARGET=release --squash .
 
+docker-local-%:
+	DOCKER_BUILDKIT=1 docker build -t fpm  --build-arg BASE_ENV=$* --build-arg TARGET=local --squash .
