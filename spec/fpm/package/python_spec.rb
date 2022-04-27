@@ -190,7 +190,7 @@ describe FPM::Package::Python do
 
   context "python_scripts_executable is set" do
     it "should have scripts with a custom hashbang line" do
-      pending("Disabled on travis-ci becaulamese it always fails, and there is no way to debug it?") if is_travis
+      skip("Disabled on travis-ci becaulamese it always fails, and there is no way to debug it?") if is_travis
       skip("Requires python3 executable") unless program_exists?("python3")
 
       subject.attributes[:python_scripts_executable] = "fancypants"
@@ -202,7 +202,7 @@ describe FPM::Package::Python do
       #script_dir = easy_install_default(subject.attributes[:python_bin], 'script_dir')
       #path = subject.staging_path(File.join(script_dir, "django-admin.py"))
 
-      # Hardcode /usr/local/bin here. On newer Python 3's I cannot figure out how to 
+      # Hardcode /usr/local/bin here. On newer Python 3's I cannot figure out how to
       # determine the script_dir at installation time. easy_install's method is gone.
       path = subject.staging_path("/usr/local/bin/django-admin.py")
 
