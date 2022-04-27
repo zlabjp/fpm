@@ -99,7 +99,7 @@ ENV GEM_PATH /fpm
 ENV PATH "/fpm/bin:${PATH}"
 COPY --chown=fpm . .
 RUN make package
-RUN gem install --no-ri --no-rdoc --install-dir=/fpm fpm-1.14.1.gem
+RUN gem install --no-ri --no-rdoc --install-dir=/fpm fpm-1.14.2.gem
 
 FROM build-local as local
 COPY --from=build-local /fpm /fpm
